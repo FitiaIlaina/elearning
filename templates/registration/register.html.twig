@@ -1,0 +1,193 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block header %}
+  <nav class="bg-[#0a192f] shadow-lg border-b border-gray-800">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center py-4">
+        <a href="#" class="flex items-center">
+          <h1 class="text-2xl md:text-3xl font-bold text-white">
+            E - <span class="text-[#64ffda]">Learning</span>
+          </h1>
+        </a>
+        
+        <button class="md:hidden text-white focus:outline-none" id="menu-toggle">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+        
+        <ul class="hidden md:flex space-x-6 items-center">
+          <li>
+            <a href="{{ path('app_register') }}" class="bg-[#112240] text-[#64ffda] border border-[#64ffda] px-6 py-2 rounded-lg font-semibold hover:bg-[#64ffda] hover:text-[#0a192f] transition duration-300">
+              S'inscrire
+            </a>
+          </li>
+          <li>
+            <a href="{{ path('app_login') }}" class="text-gray-300 hover:text-[#64ffda] transition duration-300">
+              Se connecter
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="hidden md:hidden pb-4" id="mobile-menu">
+        <ul class="space-y-2">
+          <li>
+            <a href="{{ path('app_register') }}" class="block text-gray-300 hover:text-[#64ffda] transition duration-300">
+              S'inscrire
+            </a>
+          </li>
+          <li>
+            <a href="{{ path('app_login') }}" class="block text-gray-300 hover:text-[#64ffda] transition duration-300">
+              Se connecter
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+{% endblock %}
+
+{% block main %}
+  <section class="min-h-screen bg-[#020c1b] py-12 px-4">
+    <div class="container mx-auto max-w-6xl">
+
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        
+        <div class="hidden md:block">
+          <div class="bg-gradient-to-br from-[#0a192f] to-[#112240] border border-gray-800 rounded-2xl shadow-2xl p-12 h-full min-h-[600px] flex items-center justify-center">
+            <div class="text-center">
+              <svg class="w-64 h-64 mx-auto text-[#64ffda] opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+              </svg>
+              <h2 class="text-3xl font-bold text-gray-100 mt-8">Rejoignez E-Learning</h2>
+              <p class="text-gray-400 mt-4">Créez votre compte et commencez à apprendre</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#0a192f] border border-gray-800 rounded-2xl shadow-2xl p-8 md:p-12">
+          <h2 class="text-3xl font-bold text-gray-100 text-center mb-8">
+            Inscrivez-vous
+          </h2>
+
+          {% if form_errors(registrationForm) %}
+            <div class="bg-red-900 border border-red-600 text-red-100 px-6 py-4 rounded-lg mb-6 shadow-lg">
+              {{ form_errors(registrationForm) }}
+            </div>
+          {% endif %}
+
+          {{ form_start(registrationForm, {'attr': {'class': 'space-y-6'}}) }}
+            
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">
+                Nom
+              </label>
+              {{ form_widget(registrationForm.name, {
+                'attr': {
+                  'class': 'w-full px-4 py-3 bg-[#112240] border-2 border-gray-700 text-gray-100 rounded-lg focus:outline-none focus:border-[#64ffda] transition duration-300 placeholder-gray-500',
+                  'placeholder': 'Nom'
+                }
+              }) }}
+              {{ form_errors(registrationForm.name) }}
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">
+                Prénom(s)
+              </label>
+              {{ form_widget(registrationForm.surname, {
+                'attr': {
+                  'class': 'w-full px-4 py-3 bg-[#112240] border-2 border-gray-700 text-gray-100 rounded-lg focus:outline-none focus:border-[#64ffda] transition duration-300 placeholder-gray-500',
+                  'placeholder': 'Prénom(s)'
+                }
+              }) }}
+              {{ form_errors(registrationForm.surname) }}
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">
+                Email
+              </label>
+              {{ form_widget(registrationForm.email, {
+                'attr': {
+                  'class': 'w-full px-4 py-3 bg-[#112240] border-2 border-gray-700 text-gray-100 rounded-lg focus:outline-none focus:border-[#64ffda] transition duration-300 placeholder-gray-500',
+                  'placeholder': 'votre@email.com'
+                }
+              }) }}
+              {{ form_errors(registrationForm.email) }}
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">
+                Mot de passe
+              </label>
+              {{ form_widget(registrationForm.plainPassword, {
+                'attr': {
+                  'class': 'w-full px-4 py-3 bg-[#112240] border-2 border-gray-700 text-gray-100 rounded-lg focus:outline-none focus:border-[#64ffda] transition duration-300 placeholder-gray-500',
+                  'placeholder': 'Mot de passe (6 caractères minimum)'
+                }
+              }) }}
+              {{ form_errors(registrationForm.plainPassword) }}
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-300 mb-2">
+                Type d'utilisateur
+              </label>
+              {{ form_widget(registrationForm.userType, {
+                'attr': {
+                  'class': 'w-full px-4 py-3 bg-[#112240] border-2 border-gray-700 text-gray-100 rounded-lg focus:outline-none focus:border-[#64ffda] transition duration-300'
+                }
+              }) }}
+              {{ form_errors(registrationForm.userType) }}
+            </div>
+
+            <div class="flex items-start">
+              {{ form_widget(registrationForm.agreeTerms, {
+                'attr': {
+                  'class': 'w-4 h-4 mt-1 text-[#64ffda] bg-[#112240] border-gray-700 rounded focus:ring-[#64ffda]'
+                }
+              }) }}
+              <div class="ml-2">
+                {{ form_label(registrationForm.agreeTerms, null, {
+                  'label_attr': {
+                    'class': 'text-sm text-gray-300'
+                  }
+                }) }}
+              </div>
+            </div>
+            {{ form_errors(registrationForm.agreeTerms) }}
+
+            <button 
+              type="submit"
+              class="w-full bg-[#112240] border-2 border-[#64ffda] text-[#64ffda] py-3 rounded-lg font-semibold hover:bg-[#64ffda] hover:text-[#0a192f] transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              S'inscrire
+            </button>
+
+            <div class="text-center mt-6">
+              <a 
+                href="{{ path('app_login') }}" 
+                class="text-[#64ffda] hover:text-[#52e8c4] font-medium transition duration-300"
+              >
+                Vous avez déjà un compte? Cliquez-ici
+              </a>
+            </div>
+
+          {{ form_end(registrationForm) }}
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.getElementById('menu-toggle')?.addEventListener('click', function() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    });
+  </script>
+{% endblock %}

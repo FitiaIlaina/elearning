@@ -1,0 +1,165 @@
+{# Template/inscription/inscription.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Liste des élèves 
+{% endblock %}
+
+{% block header %}
+  
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean navi" style="background: #1a1a2e;">
+            <div class="container"><a class="navbar-brand" style="padding: 0px;margin-left: 0px;height: 61px;width: 147.516px;" href="#"> <h1 style="font-family: 'Cooper Black'; color: white;">E - <span style="color: #90e3f4;">Learning</span></h1></a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon" style="color: var(--red);"></span></button>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="navbar-nav ml-auto">
+                   
+
+                     <li class="nav-item"><a class="nav-link" style="color:#ffffff;" href="{{ path('app_accueil') }}"><i class="fa fa-home"></i>&nbsp;Liste des enseignants</a></li>
+                            <li class="nav-item"><a class="nav-link" style="color:#ffffff;" href="{{ path('app_eleve') }}"><i class="icon ion-ios-book"></i>&nbsp;Liste des élèves </a></li>
+                            {% if app.user %}
+                            <li class="nav-item dropdown" style="color: #ffff;"><a class="dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" href="#" style="color: #fff;">{{ app.user.email }}</a>
+                                <div class="dropdown-menu">
+                                   
+                                    <a class="dropdown-item" href="#" id="logout-btn">Se deconnecter</a>
+                                        <div id="logout-modal" class="modal">
+                                            <div class="modal-content">
+                                                <p style="color:black;">Êtes-vous vraiment sûr de vouloir vous déconnecter ?</p>
+                                                <button id="confirm-logout" class="confirm btn btn-success" style="background-color:#83cdde; width:30%;border:2px solid black;color:black;">Oui</button>
+                                                <button id="cancel-logout" class="cancel btn btn-danger" style="background-color:grey; width:30%; border: 2px solid black;">Annuler</button>
+                                            </div>
+                                        </div>
+                                
+                                </div>
+                            
+                            </li>
+                            {% endif %}
+                   
+                    </ul>
+                   
+                </div>
+            </div>
+        </nav>
+   
+ {% endblock %}
+
+{% block main %}
+
+            {% for message in app.flashes('success') %}
+            <div class="alert alert-success"data-aos="fade-down" data-aos-duration="1000" data-aos-delay="700">
+                {{ message }}
+            </div>  
+            {% endfor %}
+
+
+
+
+    <div id="wrapper" style=" margin-bottom: 46px;">
+       
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+              
+                <div class="container-fluid" >
+                  
+                    <div class="card shadow" >
+                        <div class="card-header py-3" style="background-color:#252c40;" >
+                            <p class="text-primary m-0 font-weight-bold">Informations des étudiants</p>
+                        </div>
+                        <div class="card-body" style="background-color:#1a1a2e;">
+                           
+                            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                <table class="table my-0" id="dataTable" style="color: white;">
+                                    <thead>
+                                        <tr>
+                                            <th>Email</th>
+                                            <th>Nom </th>
+                                            <th>Prénom(s)</th>
+                                             <th>Id</th>
+                                           
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     {% for inscri in inscription %}
+                                        {% if 'ROLE_ELEVE' in inscri.roles %}
+                                            <tr>
+                                        
+                                                <td>{{inscri.email}}</td>
+                                                <td>{{ inscri.name }}</td>
+                                                <td>{{ inscri.surname }}</td>
+                                                <td>{{ inscri.id }}</td>
+                                               
+                                        
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                    
+                                </table>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+ 
+       
+
+        <footer>
+        <div class="row">
+            <div class="col-sm-6 col-md-4 footer-navigation">
+                 <h1 style="font-family: 'Cooper Black'; color: white;">E - <span style="color: #90e3f4;">Learning</span></h1>
+                  {% if is_granted ('ROLE_ADMIN') %}
+                        <p class="links"><a href="{{ path('app_accueil') }}">Listes des enseignants</a><strong> · </strong><a href="{{ path('app_eleve') }}">Listes des élèves</a></p>
+                {% elseif is_granted ('ROLE_ENSEIGNANT') or is_granted('ROLE_ELEVE') %}
+                        <p class="links"><a href="{{ path('app_accueil') }}">Accueil</a><strong> · </strong><a href="{{ path('app_cours') }}">Cours</a></p>
+                {% endif %}
+                <p class="company-name">E-learning © 2024</p>
+            </div>
+            <div class="col-sm-6 col-md-4 footer-contacts">
+                <div><span class="fa fa-map-marker footer-contacts-icon"> </span>
+                    <p><span class="new-line-span">Ivory</span> Antsirabe</p>
+                </div>
+                <div><i class="fa fa-phone footer-contacts-icon"></i>
+                    <p class="footer-center-info email text-left">0321245889</p>
+                </div>
+                <div><i class="fa fa-envelope footer-contacts-icon"></i>
+                    <p> <a href="#" target="_blank">support@company.com</a></p>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-4 footer-about">
+                <h4>A propos de E-Learning</h4>
+                <p> Une plateforme de site éducatif en ligne qui peut répondre à vos besoins.</p>
+                <div class="social-links social-icons"><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i class="fa fa-github"></i></a></div>
+            </div>
+        </div>
+    </footer>
+   <script>
+  document.getElementById('logout-btn').addEventListener('click', function(event) {
+    event.preventDefault(); 
+    event.stopPropagation();
+    document.getElementById('logout-modal').style.display = 'block';
+  });
+
+  document.getElementById('confirm-logout').addEventListener('click', function() {
+    window.location.href = "{{ path('app_logout') }}";
+  });
+
+  document.getElementById('cancel-logout').addEventListener('click', function() {
+    document.getElementById('logout-modal').style.display = 'none'; 
+  });
+</script>
+
+{% endblock %}
+

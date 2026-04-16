@@ -1,0 +1,55 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+home:
+    path: /
+    controller: App\Controller\SecurityController::login
+
+inscription:
+    path: /inscription
+    controller: App\Controller\InscriptionController::inscription
+
+    
+accueil:
+    path: /accueil
+    controller: App\Controller\HomeController::accueil
+
+
+security:
+    path: /security
+    controller: App\Controller\SecurityController::login
+
+register:
+    path: /registration
+    controller: App\Controller\RegistrationController::register
+
+ajouter:
+    path: /matiere
+    controller: App\Controller\HomeController::ajouter
+
+cours:
+    path: /matiere
+    controller: App\Controller\HomeController::cours
+
+affichage:
+    path: /matiere
+    controller: App\Controller\HomeController::afficher
+
+delete:
+    path: /matiere
+    controller: App\Controller\HomeController::delete
+
+profile:
+    path: /user_profile
+    controller: App\Controller\UseProfileController::profile
+
+submit:
+    path: /matiere
+    controller: App\Controller\HomeController::submitQuiz
+
+admin:
+    path: /admin
+    controller: App\Controller\AdminController::admin

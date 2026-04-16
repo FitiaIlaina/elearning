@@ -1,0 +1,257 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+ {{ user.surname }}
+{% endblock %}
+
+{% block header %}
+  
+        <nav class="bg-[#0a192f] shadow-lg border-b border-gray-800 sticky top-0 z-50">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center py-4">
+        <a href="#" class="flex items-center">
+          <h1 class="text-2xl md:text-3xl font-bold text-white" style="font-family: 'Cooper Black';">
+            E - <span class="text-[#64ffda]">Learning</span>
+          </h1>
+        </a>
+        
+        <button class="md:hidden text-white focus:outline-none" id="menu-toggle">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+        
+        <ul class="hidden md:flex space-x-6 items-center">
+          {% if is_granted('ROLE_ADMIN') %}
+            <li>
+              <a href="#" class="text-gray-300 hover:text-[#64ffda] transition duration-300 flex items-center">
+                <i class="fa fa-home mr-2"></i>Liste des enseignants
+              </a>
+            </li>
+            <li>
+              <a href="{{ path('app_eleve') }}" class="text-gray-300 hover:text-[#64ffda] transition duration-300 flex items-center">
+                <i class="icon ion-ios-book mr-2"></i>Liste des élèves
+              </a>
+            </li>
+            {% if app.user %}
+              <li class="relative group">
+                <button class="text-gray-300 hover:text-[#64ffda] transition duration-300 flex items-center">
+                  {{ app.user.email }}
+                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <div class="absolute right-0 mt-2 w-48 bg-[#112240] border border-gray-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                  <a href="#" id="logout-btn" class="block px-4 py-3 text-gray-300 hover:bg-[#0a192f] hover:text-[#64ffda] rounded-lg transition duration-200">
+                    Se déconnecter
+                  </a>
+                </div>
+              </li>
+            {% endif %}
+          {% elseif is_granted('ROLE_ENSEIGNANT') or is_granted('ROLE_ELEVE') %}
+            <li>
+              <a href="{{ path('app_accueil') }}" class="text-gray-300 hover:text-[#64ffda] transition duration-300 flex items-center">
+                <i class="fa fa-home mr-2"></i>Accueil
+              </a>
+            </li>
+            <li>
+              <a href="{{ path('app_cours') }}" class="text-gray-300 hover:text-[#64ffda] transition duration-300 flex items-center">
+                <i class="icon ion-ios-book mr-2"></i>Cours
+              </a>
+            </li>
+            {% if app.user %}
+              <li class="relative group">
+                <button class="text-gray-300 hover:text-[#64ffda] transition duration-300 flex items-center">
+                  {{ app.user.email }}
+                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <div class="absolute right-0 mt-2 w-48 bg-[#112240] border border-gray-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                  <a href="{{ path('app_profile') }}" class="block px-4 py-3 text-gray-300 hover:bg-[#0a192f] hover:text-[#64ffda] transition duration-200">
+                    Voir mon profil
+                  </a>
+                  <a href="#" id="logout-btn" class="block px-4 py-3 text-gray-300 hover:bg-[#0a192f] hover:text-[#64ffda] rounded-b-lg transition duration-200">
+                    Se déconnecter
+                  </a>
+                </div>
+              </li>
+            {% endif %}
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+   
+ {% endblock %}
+
+{% block main %}
+    <section class="bg-[#020c1b] min-h-screen py-12">
+        {% for label, messages in app.flashes %}
+            <div class="alert bg-green-900 border-2 border-green-600 text-green-100 px-6 py-4 rounded-lg mb-6 mx-auto max-w-4xl shadow-lg">
+                {% for message in messages %}
+                    <p><i class="fas fa-check-circle mr-2"></i>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <div class="container mx-auto px-4 pb-12" id="profile" data-aos="fade-down" data-aos-duration="1000" data-aos-delay="700">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Sidebar Profile Info -->
+                <div class="lg:col-span-1">
+                    <div class="bg-[#0a192f] rounded-2xl border-2 border-gray-700 shadow-2xl p-6 sticky top-4">
+                        <div class="text-center mb-6">
+                            <div class="w-32 h-32 bg-[#112240] rounded-full mx-auto mb-4 flex items-center justify-center border-4 border-[#64ffda]">
+                                <i class="fas fa-user text-6xl text-[#64ffda]"></i>
+                            </div>
+                            <h1 class="text-2xl font-bold text-[#64ffda]">{{ user.surname }} {{ user.name}}</h1>
+                        </div>
+                        
+                        <ul class="space-y-4">
+                            <li class="bg-[#112240] rounded-lg p-4 border border-gray-700">
+                                <strong class="text-[#64ffda] block mb-1">
+                                    <i class="fas fa-id-card mr-2"></i>Nom :
+                                </strong>
+                                <span class="text-gray-200">{{ user.name }}</span>
+                            </li>
+                            <li class="bg-[#112240] rounded-lg p-4 border border-gray-700">
+                                <strong class="text-[#64ffda] block mb-1">
+                                    <i class="fas fa-user mr-2"></i>Prénom(s) :
+                                </strong>
+                                <span class="text-gray-200">{{ user.surname }}</span>
+                            </li>
+                            <li class="bg-[#112240] rounded-lg p-4 border border-gray-700">
+                                <strong class="text-[#64ffda] block mb-1">
+                                    <i class="fas fa-envelope mr-2"></i>Email :
+                                </strong>
+                                <span class="text-gray-200">{{ user.email }}</span>
+                            </li>
+                            <li class="bg-[#112240] rounded-lg p-4 border border-gray-700">
+                                <strong class="text-[#64ffda] block mb-1">
+                                    <i class="fas fa-user-tag mr-2"></i>Rôle :
+                                </strong>
+                                <span class="text-gray-200">{{ user.usertype|join(', ') }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Profile Form -->
+                <div class="lg:col-span-2">
+                    <div class="bg-[#0a192f] rounded-2xl border-2 border-gray-700 shadow-2xl p-8">
+                        <h1 class="text-3xl font-bold text-gray-100 mb-2">
+                            <i class="fas fa-user-edit mr-3 text-[#64ffda]"></i>Profil de l'utilisateur
+                        </h1>
+                        <hr class="border-gray-700 mb-6" />
+                        
+                        {{ form_start(profileform) }}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="form-group">
+                                {{ form_row(profileform.name, {'label': false, 'attr': {'class': 'w-full bg-[#112240] border-2 border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:border-[#64ffda] focus:outline-none transition duration-300 placeholder-gray-500','placeholder': 'Nom'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_row(profileform.surname, {'label': false, 'attr': {'class': 'w-full bg-[#112240] border-2 border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:border-[#64ffda] focus:outline-none transition duration-300 placeholder-gray-500','placeholder': 'Prénom'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-6">
+                            {{ form_row(profileform.email, {'label': false, 'attr': {'class': 'w-full bg-[#112240] border-2 border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:border-[#64ffda] focus:outline-none transition duration-300 placeholder-gray-500','placeholder': 'Email'}}) }}
+                        </div>
+                        
+                        <div class="form-group mb-6">
+                            {{ form_row(profileform.plainPassword, {'label': false, 'attr': {'class': 'w-full bg-[#112240] border-2 border-gray-700 rounded-lg px-4 py-3 text-gray-100 focus:border-[#64ffda] focus:outline-none transition duration-300 placeholder-gray-500','placeholder': 'Mot de passe'}}) }}
+                        </div>
+                        
+                        <hr class="border-gray-700 mb-6" />
+                        
+                        <div class="form-group">
+                            <button class="w-full bg-[#112240] hover:bg-[#64ffda] hover:text-[#020c1b] text-gray-100 font-bold text-lg px-8 py-4 rounded-lg border-2 border-[#64ffda] transition duration-300 shadow-lg" type="submit">
+                                <i class="fas fa-save mr-2"></i>Enregistrer
+                            </button>
+                        </div>
+                        {{ form_end(profileform) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#0a192f] border-t border-gray-800 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="footer-navigation">
+                    <h1 class="text-2xl md:text-3xl font-bold text-white mb-4" style="font-family: 'Cooper Black';">
+                        E - <span class="text-[#64ffda]">Learning</span>
+                    </h1>
+                    <p class="links mb-3">
+                        <a href="{{ path('app_accueil') }}" class="text-gray-300 hover:text-[#52e8c4] transition duration-300">Accueil</a>
+                        <strong class="text-gray-500 mx-2">·</strong>
+                        <a href="{{ path('app_cours') }}" class="text-gray-300 hover:text-[#52e8c4] transition duration-300">Cours</a>
+                    </p>
+                    <p class="company-name text-gray-400">E-learning © 2024</p>
+                </div>
+
+                <div class="footer-contacts space-y-3">
+                    <div class="flex items-start">
+                        <span class="fa fa-map-marker text-[#64ffda] mr-3 mt-1"></span>
+                        <p class="text-gray-300">
+                            <span class="block">Ivory</span>
+                            Antsirabe
+                        </p>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fa fa-phone text-[#64ffda] mr-3"></i>
+                        <p class="text-gray-300">0321245889</p>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fa fa-envelope text-[#64ffda] mr-3"></i>
+                        <p>
+                            <a href="#" target="_blank" class="text-gray-300 hover:text-[#52e8c4] transition duration-300">support@company.com</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="footer-about">
+                    <h4 class="text-xl text-gray-100 font-semibold mb-4">À propos de E-Learning</h4>
+                    <p class="text-gray-300 mb-4">Une plateforme de site éducatif en ligne qui peut répondre à vos besoins.</p>
+                    <div class="social-links social-icons flex gap-4">
+                        <a href="#" class="text-gray-400 hover:text-[#64ffda] transition duration-300 text-xl">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-[#64ffda] transition duration-300 text-xl">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-[#64ffda] transition duration-300 text-xl">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-[#64ffda] transition duration-300 text-xl">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('logout-btn').addEventListener('click', function(event) {
+            event.preventDefault(); 
+            event.stopPropagation();
+            const modal = document.getElementById('logout-modal');
+            modal.style.display = 'flex';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        });
+
+        document.getElementById('confirm-logout').addEventListener('click', function() {
+            window.location.href = "{{ path('app_logout') }}";
+        });
+
+        document.getElementById('cancel-logout').addEventListener('click', function() {
+            const modal = document.getElementById('logout-modal');
+            modal.style.display = 'none';
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        });
+    </script>
+
+{% endblock %}

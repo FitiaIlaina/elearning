@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    E-Learning
+{% endblock %}
+
+{% block header %}
+     <nav class="navbar navbar-light navbar-expand-md navigation-clean navi" style="background: #1a1a2e;">
+            <div class="container"><a class="navbar-brand" style="padding: 0px;margin-left: 0px;height: 61px;width: 147.516px;" href="#"> <img class="img-fluid" src="assets/img/expansion.png" style="width: 147.516px;height: 60.6875px;"></a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon" style="color: var(--red);"></span></button>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="navbar-nav ml-auto">
+                        <button class="nav-item"><a class="nav-link" style="color:#ffffff;background:#333;border:2px;" href="#"><i class="icon ion-ios-world"></i>&nbsp;S'inscrire</a></button>
+                        <button class="nav-item"><a class="nav-link" style="color:#ffffff;background:#E219CE;" href="#"><i class="icon ion-ios-world"></i>&nbsp;Se connecter</a></button>
+                       
+                    </ul>
+                </div>
+            </div>
+        </nav>
+ {% endblock %}
+    
+ {% block main %}
+        <div class="content1">
+            <div class="image-placeholder">
+              
+            </div>
+            <div class="text-content">
+                <h1>E-learning</h1>
+                <p class="para">E-learning offre une grande flexibilité pour les étudiants en menant à une résultat réel</p>
+                <div class="buttons">
+                    <a href="#" class="btn-primary">Enseignants</a>
+                    <a href="#" class="btn-primary">Elèves</a>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}

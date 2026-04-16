@@ -1,0 +1,311 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{{ matiere.titleles }}
+{% endblock %}
+
+{% block header %}
+  
+        <nav class="bg-[#0a192f] shadow-lg border-b border-gray-800 sticky top-0 z-50">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center py-4">
+        <a href="#" class="flex items-center">
+          <h1 class="text-2xl md:text-3xl font-bold text-white"style="font-family: 'Cooper Black';">
+            E - <span class="text-[#64ffda]">Learning</span>
+          </h1>
+        </a>
+        
+        <button class="md:hidden text-white focus:outline-none" id="menu-toggle">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+        
+        <ul class="hidden md:flex space-x-6 items-center">
+          {% if is_granted('ROLE_ADMIN') %}
+            <li>
+              <a href="#" class="text-gray-300 hover:text-[#64ffda] transition duration-300 flex items-center">
+                <i class="fa fa-home mr-2"></i>Liste des enseignants
+              </a>
+            </li>
+            <li>
+              <a href="{{ path('app_eleve') }}" class="text-gray-300 hover:text-[#64ffda] transition duration-300 flex items-center">
+                <i class="icon ion-ios-book mr-2"></i>Liste des élèves
+              </a>
+            </li>
+            {% if app.user %}
+              <li class="relative group">
+                <button class="text-gray-300 hover:text-[#64ffda] transition duration-300 flex items-center">
+                  {{ app.user.email }}
+                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <div class="absolute right-0 mt-2 w-48 bg-[#112240] border border-gray-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                  <a href="#" id="logout-btn" class="block px-4 py-3 text-gray-300 hover:bg-[#0a192f] hover:text-[#64ffda] rounded-lg transition duration-200">
+                    Se déconnecter
+                  </a>
+                </div>
+              </li>
+            {% endif %}
+          {% elseif is_granted('ROLE_ENSEIGNANT') or is_granted('ROLE_ELEVE') %}
+            <li>
+              <a href="{{ path('app_accueil') }}" class="text-gray-300 hover:text-[#64ffda] transition duration-300 flex items-center">
+                <i class="fa fa-home mr-2"></i>Accueil
+              </a>
+            </li>
+            <li>
+              <a href="{{ path('app_cours') }}" class="text-gray-300 hover:text-[#64ffda] transition duration-300 flex items-center">
+                <i class="icon ion-ios-book mr-2"></i>Cours
+              </a>
+            </li>
+            {% if app.user %}
+              <li class="relative group">
+                <button class="text-gray-300 hover:text-[#64ffda] transition duration-300 flex items-center">
+                  {{ app.user.email }}
+                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <div class="absolute right-0 mt-2 w-48 bg-[#112240] border border-gray-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                  <a href="{{ path('app_profile') }}" class="block px-4 py-3 text-gray-300 hover:bg-[#0a192f] hover:text-[#64ffda] transition duration-200">
+                    Voir mon profil
+                  </a>
+                  <a href="#" id="logout-btn" class="block px-4 py-3 text-gray-300 hover:bg-[#0a192f] hover:text-[#64ffda] rounded-b-lg transition duration-200">
+                    Se déconnecter
+                  </a>
+                </div>
+              </li>
+            {% endif %}
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+   
+ {% endblock %}
+
+{% block main %}
+    <section class="bg-[#020c1b] py-8">
+        <div class="text-center py-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-100">
+      Cours</span>
+    </h1>
+    <div class="w-20 h-1 bg-[#64ffda] mx-auto mt-6"></div>
+        </div>
+        <div class="container mx-auto px-4 pb-12">
+            <div class="mb-8">
+                <h1 class="text-2xl md:text-3xl text-gray-300 mb-4">
+            
+                    <span class="block text-4xl md:text-5xl text-[#64ffda] mt-4 text-center font-bold">{{ matiere.titleles }}</span>
+                </h1>
+            </div>
+            <div class="flex justify-center">
+    <iframe
+        src="{{ asset(pdfurl) }}#toolbar=0"
+        class="w-full max-w-6xl h-[500px] border-4 border-[#64ffda] rounded-xl shadow-2xl"
+    >
+        Votre navigateur ne prend pas en charge les iframes. 
+        <a href="{{ asset(pdfurl) }}" class="text-[#64ffda] hover:text-[#52e8c4] underline">Cliquez ici pour télécharger le PDF</a>.
+    </iframe>
+</div>
+
+        </div>
+    </section>
+
+    {% if matiere.video is not empty %}
+    <section class="bg-[#020c1b] py-12">
+        <div class="container mx-auto px-4">
+            <div class="mb-6">
+                <h1 class="text-3xl md:text-4xl text-gray-100 font-semibold">Explication en vidéo</h1>
+            </div>
+            <div class="flex justify-center">
+                <video class="w-full max-w-6xl h-auto border-4 border-[#64ffda] rounded-xl shadow-2xl" controls>
+                    <source src="{{ asset(videourl) }}" type="video/mp4">
+                    Votre navigateur ne prend pas en charge les vidéos HTML5.
+                    <a href="{{ asset('uploads/videos/' ~ matiere.video) }}" class="text-[#64ffda] hover:text-[#52e8c4] underline">Cliquez ici pour télécharger la vidéo</a>.
+                </video>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if not quizCompleted %}
+    <section class="sectionQuiz bg-[#020c1b] py-12">
+        <div class="flex justify-center px-4 mb-8">
+            <h3 class="text-2xl md:text-3xl text-gray-100 text-center font-semibold">Evaluez vos compétences : Êtes-vous prêt pour le défi ?</h3>
+        </div>
+
+        <!-- Modal for when quiz ends -->
+        <div class="modal-container fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-[1000]" id="score-modal">
+            <div class="modal-content-container bg-[#0a192f] p-8 rounded-2xl border-2 border-[#64ffda] shadow-2xl max-w-lg w-full mx-4">
+                <h1 class="text-3xl text-[#64ffda] font-bold mb-6 text-center">Félicitation ! Quiz terminé.</h1>
+
+                <div class="grade-details space-y-3 mb-8 text-gray-200">
+                    <p class="text-lg">Essaie : <span class="font-semibold text-[#64ffda]">05</span></p>
+                    <p class="text-lg">Mauvaises réponses: <span id="wrong-answers" class="font-semibold text-red-400"></span></p>
+                    <p class="text-lg">Bonnes réponses : <span id="right-answers" class="font-semibold text-[#64ffda]"></span></p>
+                    <p class="text-lg">Note : <span id="grade-percentage" class="font-semibold text-[#64ffda]"></span>%</p>
+                    <p class="text-lg font-semibold"><span id="remarks" class="text-[#52e8c4]"></span></p>
+                </div>
+
+               <div class="modal-button-container text-center">
+    <button type="button" 
+            onclick="closeScoreModal({{ matiere.id }})" 
+            class="bg-[#112240] hover:bg-[#64ffda] hover:text-[#020c1b] text-gray-100 font-semibold px-8 py-3 rounded-lg border-2 border-[#64ffda] transition duration-300 shadow-lg">
+        Continuer
+    </button>
+</div>
+            </div>
+        </div>
+
+        <!-- Quiz Container -->
+        <div class="game-quiz-container max-w-4xl mx-auto bg-[#0a192f] rounded-2xl border-2 border-gray-700 shadow-2xl p-8">
+            <div class="game-details-container flex justify-between mb-8 flex-wrap gap-4">
+                <h1 class="text-xl md:text-2xl text-gray-100">
+                    <span class="text-[#64ffda] font-semibold">Score : </span>
+                    <span id="player-score" class="font-bold"></span> / 5
+                </h1>
+                <h1 class="text-xl md:text-2xl text-gray-100">
+                    <span class="text-[#64ffda] font-semibold">Question : </span>
+                    <span id="question-number" class="font-bold"></span> / 5
+                </h1>
+            </div>
+
+            <div class="game-question-container bg-[#112240] rounded-xl p-6 mb-8 border border-gray-700">
+                <h1 id="display-question" class="text-xl md:text-2xl text-gray-100 font-medium"></h1>
+            </div>
+
+            <div class="game-options-container space-y-4">
+                <div class="modal-container fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-[1000]" id="option-modal">
+                    <div class="modal-content-container bg-[#0a192f] p-8 rounded-2xl border-2 border-[#64ffda] shadow-2xl max-w-md w-full mx-4">
+                        <h1 class="text-2xl text-gray-100 mb-6 text-center font-semibold">Veuillez choisir une option</h1>
+                        <div class="modal-button-container text-center">
+                            <button onclick="closeOptionModal()" class="bg-[#112240] hover:bg-[#64ffda] hover:text-[#020c1b] text-gray-100 font-semibold px-8 py-3 rounded-lg border-2 border-[#64ffda] transition duration-300">Continuer</button>
+                        </div>
+                    </div>
+                </div>
+
+                <span class="flex items-center bg-[#112240] hover:bg-[#0a192f] rounded-lg p-4 border-2 border-gray-700 hover:border-[#64ffda] transition duration-300 cursor-pointer">
+                    <input type="radio" id="option-one" name="option" class="radio w-5 h-5 text-[#64ffda] bg-[#112240] border-gray-600 focus:ring-[#64ffda] focus:ring-2 mr-4" value="optionA" />
+                    <label for="option-one" class="labelquiz flex-1 text-white text-lg cursor-pointer" id="option-one-label"></label>
+                </span>
+
+                <span class="flex items-center bg-[#112240] hover:bg-[#0a192f] rounded-lg p-4 border-2 border-gray-700 hover:border-[#64ffda] transition duration-300 cursor-pointer">
+                    <input class="inputradio w-5 h-5 text-[#64ffda] bg-[#112240] border-gray-600 focus:ring-[#64ffda] focus:ring-2 mr-4" type="radio" id="option-two" name="option" value="optionB" />
+                    <label class="labelquiz flex-1 text-white text-lg cursor-pointer" for="option-two" id="option-two-label"></label>
+                </span>
+
+                <span class="flex items-center bg-[#112240] hover:bg-[#0a192f] rounded-lg p-4 border-2 border-gray-700 hover:border-[#64ffda] transition duration-300 cursor-pointer">
+                    <input class="inputradio w-5 h-5 text-[#64ffda] bg-[#112240] border-gray-600 focus:ring-[#64ffda] focus:ring-2 mr-4" type="radio" id="option-three" name="option" value="optionC" />
+                    <label class="labelquiz flex-1 text-white text-lg cursor-pointer" for="option-three" id="option-three-label"></label>
+                </span>
+
+                <span class="flex items-center bg-[#112240] hover:bg-[#0a192f] rounded-lg p-4 border-2 border-gray-700 hover:border-[#64ffda] transition duration-300 cursor-pointer">
+                    <input class="inputradio w-5 h-5 text-[#64ffda] bg-[#112240] border-gray-600 focus:ring-[#64ffda] focus:ring-2 mr-4" type="radio" id="option-four" name="option" value="optionD" />
+                    <label class="labelquiz flex-1 text-white text-lg cursor-pointer" for="option-four" id="option-four-label"></label>
+                </span>
+            </div>
+
+            <div class="next-button-container mt-8 text-center">
+                <button onclick="handleNextQuestion()" class="bg-[#112240] hover:bg-[#64ffda] hover:text-[#020c1b] text-gray-100 font-semibold px-10 py-3 rounded-lg border-2 border-[#64ffda] transition duration-300 shadow-lg text-lg">Suivant</button>
+            </div>
+        </div>
+    </section>
+    {% else %}
+    <section class="bg-[#020c1b] py-12">
+        <div class="flex justify-center px-4">
+            <div class="bg-[#0a192f] border-2 border-[#64ffda] rounded-xl p-8 max-w-2xl w-full">
+                <h3 class="text-2xl text-gray-100 text-center font-semibold">Vous avez déjà complété le quiz !</h3>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <footer class="bg-[#0a192f] border-t border-gray-800 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="footer-navigation">
+                    <h1 class="text-2xl md:text-3xl font-bold text-white mb-4" style="font-family: 'Cooper Black';">
+                        E - <span class="text-[#64ffda]">Learning</span>
+                    </h1>
+                    <p class="links mb-3">
+                        <a href="{{ path('app_accueil') }}" class="text-gray-300 hover:text-[#52e8c4] transition duration-300">Accueil</a>
+                        <strong class="text-gray-500 mx-2">·</strong>
+                        <a href="{{ path('app_cours') }}" class="text-gray-300 hover:text-[#52e8c4] transition duration-300">Cours</a>
+                    </p>
+                    <p class="company-name text-gray-400">E-learning © 2024</p>
+                </div>
+
+                <div class="footer-contacts space-y-3">
+                    <div class="flex items-start">
+                        <span class="fa fa-map-marker text-[#64ffda] mr-3 mt-1"></span>
+                        <p class="text-gray-300">
+                            <span class="block">Ivory</span>
+                            Antsirabe
+                        </p>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fa fa-phone text-[#64ffda] mr-3"></i>
+                        <p class="text-gray-300">0321245889</p>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fa fa-envelope text-[#64ffda] mr-3"></i>
+                        <p>
+                            <a href="#" target="_blank" class="text-gray-300 hover:text-[#52e8c4] transition duration-300">support@company.com</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="footer-about">
+                    <h4 class="text-xl text-gray-100 font-semibold mb-4">À propos de E-Learning</h4>
+                    <p class="text-gray-300 mb-4">Une plateforme de site éducatif en ligne qui peut répondre à vos besoins.</p>
+                    <div class="social-links social-icons flex gap-4">
+                        <a href="#" class="text-gray-400 hover:text-[#64ffda] transition duration-300 text-xl">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-[#64ffda] transition duration-300 text-xl">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-[#64ffda] transition duration-300 text-xl">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-[#64ffda] transition duration-300 text-xl">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const questions = {{ questionsJson|raw }};
+        const matiereId = {{ matiere.id }};
+    </script>
+
+    <script src="{{ asset('js/index.js') }}"></script>
+
+    <script>
+        document.getElementById('logout-btn').addEventListener('click', function(event) {
+            event.preventDefault(); 
+            event.stopPropagation();
+            const modal = document.getElementById('logout-modal');
+            modal.style.display = 'flex';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        });
+
+        document.getElementById('confirm-logout').addEventListener('click', function() {
+            window.location.href = "{{ path('app_logout') }}";
+        });
+
+        document.getElementById('cancel-logout').addEventListener('click', function() {
+            const modal = document.getElementById('logout-modal');
+            modal.style.display = 'none';
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        });
+    </script>
+     
+{% endblock %}
